@@ -1,0 +1,70 @@
+{
+        $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+        description:
+          "A bubbleplot showing the Year of construction of various buildings from different departments on x, square footage on y, and Department with a diverging color scale. The right side graph shows the count of Total number of floors constructed with respect to buildings interval selected on the left",
+        data: {
+          url: "building_inventory.csv",
+        },
+        hconcat: [
+          {
+          mark: { type: "circle" },
+            "width": 500,
+            "height": 500,
+            "padding": 20,
+            selection: { clickanddrag: { type: "interval", encodings: ["x"] } },
+            transform: [
+              { filter: { field: "Year Acquired", gt: 0 } },
+              { filter: { field: "Year Constructed", gt: 0 } },
+            ],
+            encoding: {
+              x: {
+                field: "Year Constructed",
+                type: "quantitative",
+                scale: { domain: [1700, 2021] },
+              },
+              y: { field: "Square Footage", type: "quantitative" },
+              opacity: { condition: { selection: "clickanddrag" }, value: 0.2 },
+              tooltip: [{ field: "Agency Name", type: "nominal" }],
+              color: {
+                field: "Agency Name",
+                type: "nominal",
+                scale: { range: ["purple", "#ff0000", "teal"] },
+              },
+            },
+          },
+          {
+            layer: [
+              {
+                mark: "bar",
+                "width": 200,
+                "height": 500,
+                "padding": 20,
+                encoding: {
+                  x: { field: "Total Floors", type: "quantitative" },
+                  y: { aggregate: "count", type: "quantitative" },
+                  opacity: { value: 0.2 },
+                },
+              },
+              {
+                mark: "bar",
+                "width": 200,
+                "height": 500,
+                "padding": 20,
+                transform: [{ filter: { selection: "clickanddrag" } }],
+                encoding: {
+                  x: {
+                    field: "Total Floors",
+                    type: "quantitative"
+                  },
+                  y: {
+                    aggregate: "count",
+                    type: "quantitative",
+                    scale: { domain: "unaggregated" },
+                  },
+                  tooltip: [{ field: "Total Floors", type: "ordinal" }],
+                },
+              },
+            ],
+          },
+        ],
+      };
