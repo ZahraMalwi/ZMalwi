@@ -19,12 +19,18 @@
     </h1>
     <p>
       A bubbleplot showing the
-      <b>Year of construction of various buildings from different departments on
+      <b>Year of construction of buildings from different departments on
       x axis</b> and <b>Square Footage on y axis</b>, with Department with a diverging
-      color scale. &nbsp; The right side graph shows the count of Total number
+      color scale. &nbsp; <br>
+      The right side graph shows the count of Total number
       of floors constructed with respect to buildings interval selected on the
       left.
+      <h3>How to interact with visualization?</h3>
+      <p> Click and drag a vertical section on the Left side graph to see a Total Floor count being highlighted on the right side of the graph
+      </p>
     </p>
+    <br>
+    <br>
     <div id="vis"></div>
 
     <script type="text/javascript">
@@ -37,7 +43,11 @@
         },
         hconcat: [
           {
+            
             mark: { type: "circle" },
+            "width": 500,
+            "height": 500,
+            "padding": 20,
             selection: { clickanddrag: { type: "interval", encodings: ["x"] } },
             transform: [
               { filter: { field: "Year Acquired", gt: 0 } },
@@ -63,6 +73,9 @@
             layer: [
               {
                 mark: "bar",
+                "width": 200,
+                "height": 500,
+                "padding": 20,
                 encoding: {
                   x: { field: "Total Floors", type: "quantitative" },
                   y: { aggregate: "count", type: "quantitative" },
@@ -71,12 +84,14 @@
               },
               {
                 mark: "bar",
+                "width": 200,
+                "height": 500,
+                "padding": 20,
                 transform: [{ filter: { selection: "clickanddrag" } }],
                 encoding: {
                   x: {
                     field: "Total Floors",
-                    type: "quantitative",
-                    scale: { domain: [0, 10] },
+                    type: "quantitative"
                   },
                   y: {
                     aggregate: "count",
